@@ -1,17 +1,9 @@
 <div class="container-fluid m-2">
-    <div class="row">
-        <div class="col">
-            <div class="text-right">
-                <button class="btn m-2 btn-secondary" (click)="toggleDisplay()">{{hidden ? "Show" : "Hide"}}</button>
-            </div>
-        </div>
+    <h1>PDF Viewer</h1>
+    <div class="m-4">
+        <app-file-list (selectEmitter)="onSelect($event)"></app-file-list>
     </div>
-    <div class="row">
-        <div class="col" *ngIf="filename">
-            <app-viewer [filename]="filename"></app-viewer>
-        </div>
-        <div class="col-sm" *ngIf="!hidden">
-            <app-file-list (selectEmitter)="onSelect($event)"></app-file-list>
-        </div>
+    <div class="mt-4 ml-2 mr-2">
+        <app-viewer #pdfViewer></app-viewer>
     </div>
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { HttpService } from '../http.service';
 
 @Component({
   selector: 'app-file-list',
@@ -7,14 +8,20 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class FileListComponent implements OnInit {
 
-  list: string[] = ["/home/zhuangyongj/git/pdfHoster/pdfHoster/pdfhoster/target/pdfs/core-java-cheasheet.pdf", "/home/zhuangyongj/git/pdfHoster/pdfHoster/pdfhosdfasdfet/pdfsdfasjava-casdsadaheet.pdf", "/home/zhuangyongj/git/pdfHoster/pdfHoster/pasdf/pdfs/core-java-chesdfet.pdf"];
+  list: string[] = [];
 
   @Output()
   selectEmitter: EventEmitter<string> = new EventEmitter();
 
-  constructor() { }
+  constructor(private http: HttpService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.http.getFileNames().subscribe({
+      next: (val: string[]) => {
+        this.list = val;
+      }, error: (e) => { console.log }
+    });
+  }
 
   onClick(i: number): void {
     this.selectEmitter.emit(this.list[i]);

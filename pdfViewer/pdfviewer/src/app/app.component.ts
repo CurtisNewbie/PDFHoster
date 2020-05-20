@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { ViewerComponent } from './viewer/viewer.component';
 
 @Component({
   selector: 'app-root',
@@ -6,9 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'pdfviewer';
+  title = 'PdfViewer';
   hidden: boolean = false;
   filename: string;
+
+  @ViewChild("pdfViewer", { static: false })
+  child: ViewerComponent;
 
   toggleDisplay(): void {
     this.hidden = !this.hidden;
@@ -16,5 +20,6 @@ export class AppComponent {
 
   onSelect(fname: string) {
     this.filename = fname;
+    this.child.displayFile(this.filename);
   }
 }
