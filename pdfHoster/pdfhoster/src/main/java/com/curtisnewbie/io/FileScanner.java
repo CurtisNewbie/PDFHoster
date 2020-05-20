@@ -103,7 +103,6 @@ public class FileScanner {
                             var kind = e.kind();
                             if (kind == ENTRY_MODIFY || kind == ENTRY_CREATE || kind == ENTRY_DELETE) {
                                 dirChangeEvent.fireAsync(dce);
-                                System.out.println(scanDir().keySet().toString()); // TODO: REMOVE THIS
                             }
                         }
                         key.reset();
