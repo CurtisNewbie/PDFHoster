@@ -55,9 +55,13 @@ public class FileScanner {
     @Inject
     private Event<DirChangeEvent> dirChangeEvent;
 
+    @Inject
+    private Event<ScannerStartup> scannerInitEvent;
+
     protected void onStart(@Observes StartupEvent se) {
         logger.info(String.format("Initialising FileScanner. Directory: %s", dir));
         this.dirFile = createDirIfNotExists();
+        this.scannerInitEvent.fireAsync(new ScannerStartup());
         watchDirChanges();
     }
 

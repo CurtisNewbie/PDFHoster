@@ -26,27 +26,35 @@ public class FileManager {
 
     private Map<String, File> files = new ConcurrentHashMap<>();
 
+    protected void onScannerStart(@ObservesAsync ScannerStartup ss) {
+        updateFiles(); // scan files for the first time
+    }
+
     /**
      * Handle {@code DirChangeEvent} fired by {@code FileScanner} and update the
      * internal Map accordingly.
-     * <p>
-     * This method undertakes two operations, first one is to iterate the Map
-     * {@code files} to remove files that don't exist. The second operation is to
-     * scan the directory, and update the Map {@code files} only for new discovered
-     * entries.
      * 
      * @param ce a DirChangeEvent indicating the change of the directory
      */
     protected void onDirChanged(@ObservesAsync DirChangeEvent ce) {
+        updateFiles();
+    }
+
+    /**
+     * This method undertakes two operations, first one is to iterate the Map
+     * {@code files} to remove files that don't exist. The second operation is to
+     * scan the directory, and update the Map {@code files} only for new discovered
+     * entries.
+     */
+    private void updateFiles() {
         Map<String, File> scannedFiles = scanner.scanDir();
         for (Map.Entry<String, File> entry : this.files.entrySet())
             if (!entry.getValue().exists())
                 files.remove(entry.getKey());
 
-        for (Map.Entry<String, File> entry : scannedFiles.entrySet()) {
+        for (Map.Entry<String, File> entry : scannedFiles.entrySet())
             if (!files.containsKey(entry.getKey()))
                 files.put(entry.getKey(), entry.getValue());
-        }
     }
 
     /**
