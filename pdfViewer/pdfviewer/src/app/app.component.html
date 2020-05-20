@@ -2,16 +2,16 @@
     <div class="row">
         <div class="col">
             <div class="text-right">
-                <button class="btn m-2 btn-secondary" (click)=" toggleDisplay()">{{hidden ? "Show" : "Hide"}}</button>
+                <button class="btn m-2 btn-secondary" (click)="toggleDisplay()">{{hidden ? "Show" : "Hide"}}</button>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col">
-            <app-viewer></app-viewer>
+        <div class="col" *ngIf="filename">
+            <app-viewer [filename]="filename"></app-viewer>
         </div>
         <div class="col-sm" *ngIf="!hidden">
-            <app-file-list></app-file-list>
+            <app-file-list (selectEmitter)="onSelect($event)"></app-file-list>
         </div>
     </div>
 </div>

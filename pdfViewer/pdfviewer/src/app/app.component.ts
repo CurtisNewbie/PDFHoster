@@ -8,10 +8,13 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'pdfviewer';
   hidden: boolean = false;
-
+  filename: string;
 
   toggleDisplay(): void {
     this.hidden = !this.hidden;
   }
 
+  onSelect(fname: string) {
+    this.filename = fname;
+  }
 }
