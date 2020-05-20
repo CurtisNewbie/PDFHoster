@@ -1,1 +1,17 @@
-<app-file-list></app-file-list>
+<div class="container-fluid m-2">
+    <div class="row">
+        <div class="col">
+            <div class="text-right">
+                <button class="btn m-2 btn-secondary" (click)=" toggleDisplay()">{{hidden ? "Show" : "Hide"}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <app-viewer></app-viewer>
+        </div>
+        <div class="col-sm" *ngIf="!hidden">
+            <app-file-list></app-file-list>
+        </div>
+    </div>
+</div>

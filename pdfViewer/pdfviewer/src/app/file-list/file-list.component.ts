@@ -7,8 +7,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class FileListComponent implements OnInit {
 
-  list: string[] = [];
-  hidden: boolean = false;
+  list: string[] = ["/home/zhuangyongj/git/pdfHoster/pdfHoster/pdfhoster/target/pdfs/core-java-cheasheet.pdf", "/home/zhuangyongj/git/pdfHoster/pdfHoster/pdfhoster/target/pdfs/core-java-cheasheet.pdf", "/home/zhuangyongj/git/pdfHoster/pdfHoster/pdfhoster/target/pdfs/core-java-cheasheet.pdf"];
 
   @Output()
   click: EventEmitter<string> = new EventEmitter();
@@ -20,9 +19,5 @@ export class FileListComponent implements OnInit {
   onClick(i: number): void {
     this.click.emit(this.list[i]);
     console.log("Clicked", i);
-  }
-
-  toggleDisplay(): void {
-    this.hidden = !this.hidden;
   }
 }

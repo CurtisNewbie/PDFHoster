@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pdfviewer';
+  hidden: boolean = false;
+
+
+  toggleDisplay(): void {
+    this.hidden = !this.hidden;
+  }
+
 }
