@@ -1,0 +1,12 @@
+<div class="container-fluid">
+    <div class="text-right">
+        <button class="btn mt-2 mb-2 btn-secondary" (click)=" toggleDisplay()">{{hidden ? "Show" : "Hide"}}</button>
+    </div>
+    <div *ngIf="!hidden">
+        <div>
+            <ul class="list-group" *ngFor="let n of list; let i = index">
+                <button class="list-group-item list-group-item-action" (click)="onClick(i)">{{n}}</button>
+            </ul>
+        </div>
+    </div>
+</div>
