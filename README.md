@@ -24,3 +24,11 @@ For example:
             |_ 'core-java.pdf'
             |_ 'effective-java.pdf'
             |_ 'microservices-and-patterns.pdf'
+           
+Once the app is up and running, you can access the app via: 
+ 
+    http://localhost:8080/
+
+Notice that you will need to change the **localhost** to the IP address of the hoster (e.g., 192.168.1.1).
+
+
