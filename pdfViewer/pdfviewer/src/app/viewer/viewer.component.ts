@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpService } from '../http.service';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 
@@ -16,6 +16,9 @@ export class ViewerComponent implements OnInit {
   @ViewChild('pdfViewer', { static: true })
   pdfViewer: PdfJsViewerComponent;
 
+  @ViewChild('viewerPlaceHolder', { static: true })
+  viewerPlaceHolder: ElementRef;
+
   constructor(private http: HttpService) {
   }
 
@@ -25,6 +28,7 @@ export class ViewerComponent implements OnInit {
   displayFile(filename: string) {
     this.filename = filename;
     this.fetchFile();
+    this.viewerPlaceHolder.nativeElement.scrollIntoView();
   }
 
   private fetchFile() {

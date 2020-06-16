@@ -1,4 +1,6 @@
-<h2 style="word-wrap: break-word;">{{shortname}}</h2>
+<h2 style="word-wrap: break-word;">{{shortname? shortname : "Select One First"}}</h2>
+
+<span #viewerPlaceHolder></span>
 <div id="pdfViewer">
     <ng2-pdfjs-viewer [zoom]="100" id="pdfViewer" #pdfViewer></ng2-pdfjs-viewer>
 </div>
