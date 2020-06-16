@@ -6,6 +6,7 @@ import java.io.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.ObservesAsync;
 import javax.inject.Inject;
+import org.jboss.logging.Logger;
 
 /**
  * ------------------------------------
@@ -14,12 +15,14 @@ import javax.inject.Inject;
  * <p>
  * ------------------------------------
  * <p>
- * Class that provides methods to retrieve files discovered in directory (which
- * might or might not be PDFs).
+ * Class that provides methods to retrieve files discovered in directory (which might or might not
+ * be PDFs).
  * </p>
  */
 @ApplicationScoped
 public class FileManager {
+
+    private static final Logger logger = Logger.getLogger(FileManager.class);
 
     @Inject
     protected FileScanner scanner;
@@ -31,8 +34,8 @@ public class FileManager {
     }
 
     /**
-     * Handle {@code DirChangeEvent} fired by {@code FileScanner} and update the
-     * internal Map accordingly.
+     * Handle {@code DirChangeEvent} fired by {@code FileScanner} and update the internal Map
+     * accordingly.
      * 
      * @param ce a DirChangeEvent indicating the change of the directory
      */
@@ -41,10 +44,9 @@ public class FileManager {
     }
 
     /**
-     * This method undertakes two operations, first one is to iterate the Map
-     * {@code files} to remove files that don't exist. The second operation is to
-     * scan the directory, and update the Map {@code files} only for new discovered
-     * entries.
+     * This method undertakes two operations, first one is to iterate the Map {@code files} to
+     * remove files that don't exist. The second operation is to scan the directory, and update the
+     * Map {@code files} only for new discovered entries.
      */
     private void updateFiles() {
         Map<String, File> scannedFiles = scanner.scanDir();
@@ -60,10 +62,9 @@ public class FileManager {
     /**
      * Get the names of all files.
      * <p>
-     * These names can be used later to retrieve the actual file. The returned List
-     * is not backed by any data structure (e.g., Map), thus will not be updated
-     * accordingly once returned. I.e., it might only reflect the view that it's
-     * created.
+     * These names can be used later to retrieve the actual file. The returned List is not backed by
+     * any data structure (e.g., Map), thus will not be updated accordingly once returned. I.e., it
+     * might only reflect the view that it's created.
      * 
      * @return list of names of all files discovered
      */
@@ -86,5 +87,24 @@ public class FileManager {
         if (f != null && !f.exists()) // return null if the file doesn't exist
             f = null;
         return f;
+    }
+
+    /**
+     * Create an empty file in directory
+     * 
+     * @param name
+     * @return File or NULL if IOException is caught
+     */
+    public File createFile(String name) {
+        logger.info("Create file " + name);
+        if (name == null)
+            name = "random.pdf";
+        File file = new File(scanner.getDir(), name);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            file = null;
+        }
+        return file;
     }
 }

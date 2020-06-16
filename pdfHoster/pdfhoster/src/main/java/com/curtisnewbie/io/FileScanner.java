@@ -30,15 +30,13 @@ import io.quarkus.runtime.StartupEvent;
  * <p>
  * Class that is responsible for scanning of files in the specified directory.
  * <p>
- * It provides the {@link FileScanner#scanDir()} method to retrieves files in
- * the directory in forms of a Map. This method is {@code synchronized} thus can
- * be accessed by multiple threads.
+ * It provides the {@link FileScanner#scanDir()} method to retrieves files in the directory in forms
+ * of a Map. This method is {@code synchronized} thus can be accessed by multiple threads.
  * <p>
- * Notice that on application startup, if the specified directory doesn't exist,
- * it creates the directory to use. It also creates a new Thread that watches
- * for changes in the directory, when a change is detected (modified, created or
- * deleted), an event {@code DirChangeEvent} is fired asynchronously. The class
- * that needs to handle such changes will need to observes the event using
+ * Notice that on application startup, if the specified directory doesn't exist, it creates the
+ * directory to use. It also creates a new Thread that watches for changes in the directory, when a
+ * change is detected (modified, created or deleted), an event {@code DirChangeEvent} is fired
+ * asynchronously. The class that needs to handle such changes will need to observes the event using
  * {@code @ObservesAsync}
  * 
  */
@@ -47,9 +45,11 @@ public class FileScanner {
 
     private static final Logger logger = Logger.getLogger(FileScanner.class);
 
+    // TODO: consider to inject it via constructor, such that it can be final
     @ConfigProperty(name = "config.scan.dir")
     protected String dir;
 
+    // TODO: it might have concurrency problem, terriable way to publish this object
     private File dirFile = null;
 
     @Inject
@@ -60,18 +60,19 @@ public class FileScanner {
 
     protected void onStart(@Observes StartupEvent se) {
         this.dirFile = createDirIfNotExists();
-        logger.info(String.format("Initialising FileScanner. Directory: '%s'", this.dirFile.getAbsolutePath()));
+        logger.info(String.format("Initialising FileScanner. Directory: '%s'",
+                this.dirFile.getAbsolutePath()));
         this.scannerInitEvent.fireAsync(new ScannerStartup());
         watchDirChanges();
     }
 
     /**
-     * Scan the directory and return a map of files. This method is synchrounized
-     * and the files scanned can be of any type, it's the user's reponsibility to
-     * make sure that the files in this directory are PDFs.
+     * Scan the directory and return a map of files. This method is synchrounized and the files
+     * scanned can be of any type, it's the user's reponsibility to make sure that the files in this
+     * directory are PDFs.
      * 
-     * @return a Map of files, where the key is the absolute path to the file and
-     *         the value is the actual file.
+     * @return a Map of files, where the key is the absolute path to the file and the value is the
+     *         actual file.
      */
     public synchronized Map<String, File> scanDir() {
         Map<String, File> tempMap = new HashMap<>();
@@ -85,9 +86,8 @@ public class FileScanner {
     }
 
     /**
-     * Start a new Thread which uses WatchService to detect changes in a directory.
-     * If a change is detected, it fires a {@code DirChangeEvent} event
-     * asynchrounously.
+     * Start a new Thread which uses WatchService to detect changes in a directory. If a change is
+     * detected, it fires a {@code DirChangeEvent} event asynchrounously.
      */
     private void watchDirChanges() {
         new Thread(() -> {
@@ -101,7 +101,8 @@ public class FileScanner {
                         for (var e : key.pollEvents()) {
                             logger.info("Detected changes in directory.");
                             var kind = e.kind();
-                            if (kind == ENTRY_MODIFY || kind == ENTRY_CREATE || kind == ENTRY_DELETE) {
+                            if (kind == ENTRY_MODIFY || kind == ENTRY_CREATE
+                                    || kind == ENTRY_DELETE) {
                                 dirChangeEvent.fireAsync(dce);
                             }
                         }
@@ -140,5 +141,14 @@ public class FileScanner {
                 list.add(f);
         }
         return list;
+    }
+
+    /**
+     * Get path (in String) to the directory
+     * 
+     * @return path in String
+     */
+    public String getDir() {
+        return this.dir;
     }
 }
