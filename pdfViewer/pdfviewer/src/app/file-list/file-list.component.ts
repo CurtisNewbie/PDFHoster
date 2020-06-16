@@ -9,6 +9,7 @@ import { HttpService } from '../http.service';
 export class FileListComponent implements OnInit {
 
   list: string[] = [];
+  fileUploadUrl: string = this.http.getUploadUrl();
 
   @Output()
   selectEmitter: EventEmitter<string> = new EventEmitter();

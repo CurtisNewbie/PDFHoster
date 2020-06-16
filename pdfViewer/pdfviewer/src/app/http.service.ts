@@ -19,4 +19,8 @@ export class HttpService {
     let headers: HttpHeaders = new HttpHeaders({ 'filename': filename });
     return this.http.get(`${BASEURL}/file`, { headers: headers, responseType: 'blob', observe: "body" });
   }
+
+  getUploadUrl(): string {
+    return `${BASEURL}/file`;
+  }
 }
