@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 import java.io.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.ObservesAsync;
-
+import com.curtisnewbie.config.CliArguments;
 import com.curtisnewbie.config.IOConfig;
 
 import org.jboss.logging.Logger;
@@ -17,8 +17,8 @@ import org.jboss.logging.Logger;
  * <p>
  * ------------------------------------
  * <p>
- * Class that provides methods to retrieve files discovered in directory (which
- * might or might not be PDFs).
+ * Class that provides methods to retrieve files discovered in directory (which might or might not
+ * be PDFs).
  * </p>
  */
 @ApplicationScoped
@@ -30,9 +30,13 @@ public class FileManager {
     private final String DIR;
     private final ConcurrentMap<String, File> files = new ConcurrentHashMap<>();
 
-    public FileManager(FileScanner scanner, IOConfig ioConfig) {
+    public FileManager(FileScanner scanner, IOConfig ioConfig, CliArguments cli) {
         this.scanner = scanner;
-        this.DIR = ioConfig.scannedDir();
+        String temp;
+        if ((temp = cli.directory()) != null)
+            this.DIR = temp;
+        else
+            this.DIR = ioConfig.scannedDir();
         this.DEFAULT_FNAME = ioConfig.defaultFileName();
     }
 
@@ -41,8 +45,8 @@ public class FileManager {
     }
 
     /**
-     * Handle {@code DirChangeEvent} fired by {@code FileScanner} and update the
-     * internal Map accordingly.
+     * Handle {@code DirChangeEvent} fired by {@code FileScanner} and update the internal Map
+     * accordingly.
      * 
      * @param ce a DirChangeEvent indicating the change of the directory
      */
@@ -51,10 +55,9 @@ public class FileManager {
     }
 
     /**
-     * This method undertakes two operations, first one is to iterate the Map
-     * {@code files} to remove files that don't exist. The second operation is to
-     * scan the directory, and update the Map {@code files} only for new discovered
-     * entries.
+     * This method undertakes two operations, first one is to iterate the Map {@code files} to
+     * remove files that don't exist. The second operation is to scan the directory, and update the
+     * Map {@code files} only for new discovered entries.
      */
     private void updateFiles() {
         this.files.forEach((k, v) -> {
@@ -69,10 +72,9 @@ public class FileManager {
     /**
      * Get the names of all files.
      * <p>
-     * These names can be used later to retrieve the actual file. The returned List
-     * is not backed by any data structure (e.g., Map), thus will not be updated
-     * accordingly once returned. I.e., it might only reflect the view when it's
-     * created.
+     * These names can be used later to retrieve the actual file. The returned List is not backed by
+     * any data structure (e.g., Map), thus will not be updated accordingly once returned. I.e., it
+     * might only reflect the view when it's created.
      * 
      * @return list of names of all files discovered
      */

@@ -15,6 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import com.curtisnewbie.config.CliArguments;
 import com.curtisnewbie.config.IOConfig;
 import org.jboss.logging.Logger;
 
@@ -54,8 +55,12 @@ public class FileScanner {
     @Inject
     private Event<ScannerStartup> scannerInitEvent;
 
-    public FileScanner(IOConfig ioConfig) {
-        this.SCANNED_DIR = ioConfig.scannedDir();
+    public FileScanner(IOConfig ioConfig, CliArguments cli) {
+        String temp;
+        if ((temp = cli.directory()) != null)
+            this.SCANNED_DIR = temp;
+        else
+            this.SCANNED_DIR = ioConfig.scannedDir();
         this.dirFile = createDirIfNotExists();
     }
 
