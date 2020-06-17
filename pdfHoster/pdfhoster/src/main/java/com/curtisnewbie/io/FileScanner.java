@@ -15,8 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import com.curtisnewbie.config.IOConfig;
 import org.jboss.logging.Logger;
 
 import io.quarkus.runtime.StartupEvent;
@@ -45,12 +44,9 @@ public class FileScanner {
 
     private static final Logger logger = Logger.getLogger(FileScanner.class);
 
-    // TODO: consider to inject it via constructor, such that it can be final
-    @ConfigProperty(name = "config.scan.dir")
-    protected String dir;
+    private final String SCANNED_DIR;
 
-    // TODO: it might have concurrency problem, terriable way to publish this object
-    private File dirFile = null;
+    private final File dirFile;
 
     @Inject
     private Event<DirChangeEvent> dirChangeEvent;
@@ -58,12 +54,16 @@ public class FileScanner {
     @Inject
     private Event<ScannerStartup> scannerInitEvent;
 
-    protected void onStart(@Observes StartupEvent se) {
+    public FileScanner(IOConfig ioConfig) {
+        this.SCANNED_DIR = ioConfig.scannedDir();
         this.dirFile = createDirIfNotExists();
+    }
+
+    protected void onStart(@Observes StartupEvent se) {
         logger.info(String.format("Initialising FileScanner. Directory: '%s'",
                 this.dirFile.getAbsolutePath()));
-        this.scannerInitEvent.fireAsync(new ScannerStartup());
-        watchDirChanges();
+        this.scannerInitEvent.fireAsync(ScannerStartup.SCANNER_STARTUP);
+        initDirChangeWatcher();
     }
 
     /**
@@ -89,9 +89,9 @@ public class FileScanner {
      * Start a new Thread which uses WatchService to detect changes in a directory. If a change is
      * detected, it fires a {@code DirChangeEvent} event asynchrounously.
      */
-    private void watchDirChanges() {
+    private void initDirChangeWatcher() {
         new Thread(() -> {
-            final DirChangeEvent dce = new DirChangeEvent();
+            final DirChangeEvent dce = DirChangeEvent.DIR_CHANGE_EVENT;
             try {
                 WatchService watcher = FileSystems.getDefault().newWatchService();
                 dirFile.toPath().register(watcher, ENTRY_DELETE, ENTRY_MODIFY, ENTRY_CREATE);
@@ -119,7 +119,7 @@ public class FileScanner {
      * Create specified directory if not exists
      */
     private File createDirIfNotExists() {
-        File file = new File(dir);
+        File file = new File(SCANNED_DIR);
         if (!file.exists())
             file.mkdir();
         return file;
@@ -141,14 +141,5 @@ public class FileScanner {
                 list.add(f);
         }
         return list;
-    }
-
-    /**
-     * Get path (in String) to the directory
-     * 
-     * @return path in String
-     */
-    public String getDir() {
-        return this.dir;
     }
 }

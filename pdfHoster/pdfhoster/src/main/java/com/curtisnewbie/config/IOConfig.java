@@ -1,7 +1,5 @@
 package com.curtisnewbie.config;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import io.quarkus.arc.config.ConfigProperties;
@@ -10,7 +8,7 @@ import io.quarkus.arc.config.ConfigProperties;
 public interface IOConfig {
 
     /**
-     * Get teh default filename used for file uploading.
+     * Get the default filename used for file uploading.
      * 
      * @return default filename
      */
