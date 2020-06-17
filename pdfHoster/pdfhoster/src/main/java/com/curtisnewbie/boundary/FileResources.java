@@ -11,7 +11,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -42,8 +41,11 @@ import com.curtisnewbie.io.FileManager;
 @ApplicationScoped
 public class FileResources {
 
-    @Inject
-    protected FileManager fmanager;
+    private final FileManager fmanager;
+
+    public FileResources(FileManager fmanager) {
+        this.fmanager = fmanager;
+    }
 
     @GET
     public File getFile(@HeaderParam("filename") String filename) {
@@ -64,18 +66,16 @@ public class FileResources {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
-    public void uploadFile(MultipartFormDataInput formDataInput,
-            @Suspended AsyncResponse asyncResponse) {
+    public void uploadFile(MultipartFormDataInput formDataInput, @Suspended AsyncResponse asyncResponse) {
         try {
-            File file = fmanager
-                    .createFile(formDataInput.getFormDataPart("filename", String.class, null));
+            File file = fmanager.createFile(formDataInput.getFormDataPart("filename", String.class, null));
             if (file == null) {
                 throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
             }
 
             try (FileOutputStream fileOut = new FileOutputStream(file);
-                    ReadableByteChannel channalIn = Channels.newChannel(
-                            formDataInput.getFormDataPart("file", InputStream.class, null));) {
+                    ReadableByteChannel channalIn = Channels
+                            .newChannel(formDataInput.getFormDataPart("file", InputStream.class, null));) {
 
                 FileChannel channelOut = fileOut.getChannel();
                 channelOut.transferFrom(channalIn, 0, Long.MAX_VALUE);
