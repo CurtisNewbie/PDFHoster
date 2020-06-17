@@ -16,8 +16,8 @@ public interface IOConfig {
     String defaultFileName();
 
     /**
-     * The path to the directory which is scanned and watched for changes. This
-     * directory should contain the PDFs files that will be hosted.
+     * The path to the directory which is scanned and watched for changes. This directory should
+     * contain the PDFs files that will be hosted.
      * 
      * @return path to directory
      */
