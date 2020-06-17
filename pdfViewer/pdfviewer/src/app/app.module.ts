@@ -19,8 +19,7 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
     BrowserModule,
     AppRoutingModule,
     PdfJsViewerModule,
-    HttpClientModule,
-    FormsModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

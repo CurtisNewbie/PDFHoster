@@ -11,7 +11,7 @@ export class FileListComponent implements OnInit {
   list: string[] = [];
   fileUploadUrl: string = this.http.getUploadUrl();
   found: string[] = [];
-  searchedStr = "";
+  // searchedStr = "";
 
   @Output()
   selectEmitter: EventEmitter<string> = new EventEmitter();
@@ -31,12 +31,15 @@ export class FileListComponent implements OnInit {
     console.log("Clicked", i);
   }
 
-  search(): void {
-    this.found = [];
-    let lowerStr = this.searchedStr.toLowerCase();
-    this.list.forEach((v, i, a) => {
-      if (v.toLowerCase().indexOf(lowerStr) >= 0)
-        this.found.push(v);
-    })
+  search(searchedStr: any): void {
+    let lowerStr: string = searchedStr.target.value.toLowerCase();
+    if (lowerStr.length == 0 && this.found.length > 0) { this.found = []; }
+    else {
+      this.found = [];
+      this.list.forEach((v, i, a) => {
+        if (v.toLowerCase().indexOf(lowerStr) >= 0)
+          this.found.push(v);
+      })
+    }
   }
 }

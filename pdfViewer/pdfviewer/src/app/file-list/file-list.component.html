@@ -12,24 +12,23 @@
             <form enctype="multipart/form-data" [action]="fileUploadUrl" method="post">
                 <div class="form-group">
                     <label for="selectFile">Select PDF:</label>
-                    <input class="form-control-file" type="file" name="file" id="selectFile">
+                    <input class="form-control-file" required="true" type="file" name="file" id="selectFile">
                 </div>
                 <div class="form-group">
                     <label for="filename">PDF File Name:</label>
-                    <input class="form-control" type="text" name="filename" placeholder="Enter file name" id="filename">
+                    <input class="form-control" required="true" type="text" name="filename"
+                        placeholder="Enter file name" id="filename">
                 </div>
                 <button class="btn btn-primary" type="submit" id="fileUpload">Upload</button>
             </form>
         </div>
         <div class="mb-3">
             <h3>Search PDF:</h3>
-            <input type="text" class="form-control" (keyup)="search()" [(ngModel)]="searchedStr">
-            <div *ngIf="searchedStr.length > 0">
-                <ul class="list-group" *ngFor="let f of found; let i = index">
-                    <button class="list-group-item list-group-item-action" (click)="onClick(i)"
-                        style="word-wrap: break-word;">{{f}}</button>
-                </ul>
-            </div>
+            <input type="text" class="form-control" (keyup)="search($event)">
+            <ul class="list-group" *ngFor="let f of found; let i = index">
+                <button class="list-group-item list-group-item-action" (click)="onClick(i)"
+                    style="word-wrap: break-word;">{{f}}</button>
+            </ul>
         </div>
     </div>
 </div>
