@@ -10,6 +10,8 @@ export class FileListComponent implements OnInit {
 
   list: string[] = [];
   fileUploadUrl: string = this.http.getUploadUrl();
+  found: string[] = [];
+  searchedStr = "";
 
   @Output()
   selectEmitter: EventEmitter<string> = new EventEmitter();
@@ -27,5 +29,14 @@ export class FileListComponent implements OnInit {
   onClick(i: number): void {
     this.selectEmitter.emit(this.list[i]);
     console.log("Clicked", i);
+  }
+
+  search(): void {
+    this.found = [];
+    let lowerStr = this.searchedStr.toLowerCase();
+    this.list.forEach((v, i, a) => {
+      if (v.toLowerCase().indexOf(lowerStr) >= 0)
+        this.found.push(v);
+    })
   }
 }

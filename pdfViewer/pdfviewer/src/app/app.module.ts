@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -18,7 +19,8 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
     BrowserModule,
     AppRoutingModule,
     PdfJsViewerModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
