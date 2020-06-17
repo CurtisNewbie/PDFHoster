@@ -1,5 +1,7 @@
-<h2 style="word-wrap: break-word;">{{shortname? shortname : "Select One First"}}</h2>
-
+<h2 style="word-wrap: break-word;">{{shortname}}</h2>
+<div *ngIf="!shortname" class="ml-4 mr-4 alert alert-secondary">
+    No PDF selected. Consider picking one to read?
+</div>
 <span #viewerPlaceHolder></span>
 <div id="pdfViewer">
     <ng2-pdfjs-viewer [zoom]="100" id="pdfViewer" #pdfViewer></ng2-pdfjs-viewer>

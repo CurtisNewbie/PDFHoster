@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <div>
         <div>
+            <div *ngIf="list.length == 0" class="alert alert-secondary">List is Empty</div>
             <ul class="list-group" *ngFor="let n of list; let i = index">
                 <button class="list-group-item list-group-item-action" (click)="onClick(i)"
                     style="word-wrap: break-word;">{{n}}</button>
@@ -15,7 +16,7 @@
                 </div>
                 <div class="form-group">
                     <label for="filename">PDF File Name:</label>
-                    <input type="text" name="filename" id="filename">
+                    <input class="form-control" type="text" name="filename" placeholder="Enter file name" id="filename">
                 </div>
                 <button class="btn btn-primary" type="submit" id="fileUpload">Upload</button>
             </form>
