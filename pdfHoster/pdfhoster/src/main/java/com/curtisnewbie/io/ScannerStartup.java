@@ -11,4 +11,5 @@ package com.curtisnewbie.io;
  * </p>
  */
 public final class ScannerStartup {
+    public static final ScannerStartup SCANNER_STARTUP = new ScannerStartup();
 }

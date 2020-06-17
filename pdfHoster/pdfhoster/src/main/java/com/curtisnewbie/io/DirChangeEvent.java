@@ -12,4 +12,5 @@ package com.curtisnewbie.io;
  */
 
 public final class DirChangeEvent {
+    public static final DirChangeEvent DIR_CHANGE_EVENT = new DirChangeEvent();
 }
