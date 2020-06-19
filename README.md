@@ -69,3 +69,6 @@ e.g.,
 Again, this is another typical example that I actually used:
 
     java -jar target/pdfhoster-1.0-SNAPSHOT-runner.jar -DUploadingEnabled=false -DDirectory=/home/zhuangyongj/Documents/pdfs
+
+## Demo
+<img src="https://user-images.githubusercontent.com/45169791/85094935-919f7480-b222-11ea-92fd-f3b78b483e9a.gif" width="700">
