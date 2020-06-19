@@ -2,16 +2,16 @@
     <div>
         <div>
             <div *ngIf="list.length == 0" class="alert alert-secondary">List is Empty</div>
-            <ul class="list-group" *ngFor="let n of list; let i = index">
-                <button class="list-group-item list-group-item-action" (click)="onClick(i)"
+            <ul class="list-group" *ngFor="let n of list">
+                <button class="list-group-item list-group-item-action" (click)="onClick(n)"
                     style="word-wrap: break-word;">{{n}}</button>
             </ul>
         </div>
         <div class="mb-3 p-3 border">
             <h4>Search PDF:</h4>
             <input type="text" class="form-control" (keyup)="search($event)">
-            <ul class="list-group" *ngFor="let f of found; let i = index">
-                <button class="list-group-item list-group-item-action" (click)="onClick(i)"
+            <ul class="list-group" *ngFor="let f of found">
+                <button class="list-group-item list-group-item-action" (click)="onClick(f)"
                     style="word-wrap: break-word;">{{f}}</button>
             </ul>
         </div>

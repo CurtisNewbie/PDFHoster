@@ -26,9 +26,9 @@ export class FileListComponent implements OnInit {
     });
   }
 
-  onClick(i: number): void {
-    this.selectEmitter.emit(this.list[i]);
-    console.log("Clicked", i);
+  onClick(name: string): void {
+    this.selectEmitter.emit(name);
+    console.log("Clicked", name);
   }
 
   search(searchedStr: any): void {
