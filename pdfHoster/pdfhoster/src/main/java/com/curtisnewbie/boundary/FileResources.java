@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -15,21 +14,24 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import io.quarkus.runtime.StartupEvent;
 import com.curtisnewbie.config.CliArguments;
+import com.curtisnewbie.io.FileEntry;
 import com.curtisnewbie.io.FileManager;
 
 /**
@@ -60,11 +62,9 @@ public class FileResources {
     }
 
     @GET
-    public File getFile(@HeaderParam("filename") String filename) {
-        if (filename == null)
-            throw new NotFoundException();
-
-        File f = fmanager.getFile(filename);
+    @Path("/{id}")
+    public File getFile(@PathParam("id") int id) {
+        File f = fmanager.getFile(id);
         if (f != null)
             return f;
         else
@@ -72,10 +72,11 @@ public class FileResources {
     }
 
     @GET
-    @Path("/names")
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getFileNames() {
-        return fmanager.getAllFileNames();
+    public List<FileEntry> getFileNames() {
+        List<FileEntry> entries = fmanager.getAllFileEntries();
+        return entries;
     }
 
     @POST

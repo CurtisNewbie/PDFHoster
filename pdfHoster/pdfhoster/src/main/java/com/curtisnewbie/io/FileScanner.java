@@ -79,12 +79,12 @@ public class FileScanner {
      * @return a Map of files, where the key is the absolute path to the file and the value is the
      *         actual file.
      */
-    public synchronized Map<String, File> scanDir() {
-        Map<String, File> tempMap = new HashMap<>();
+    public synchronized Map<Integer, File> scanDir() {
+        Map<Integer, File> tempMap = new HashMap<>();
         if (dirFile.exists()) {
             for (File f : listDir(dirFile)) {
                 if (f != null)
-                    tempMap.put(f.getAbsolutePath(), f);
+                    tempMap.put(f.getAbsolutePath().hashCode(), f);
             }
         }
         return tempMap;

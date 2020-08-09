@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PdfFile } from './model/file';
 
 const BASEURL = `http://${location.hostname}:8080`;
 
@@ -11,13 +12,12 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  getFileNames(): Observable<string[]> {
-    return this.http.get<string[]>(`${BASEURL}/file/names`, { responseType: "json" });
+  getFiles(): Observable<PdfFile[]> {
+    return this.http.get<PdfFile[]>(`${BASEURL}/file/all`, { responseType: "json" });
   }
 
-  getFile(filename: string): Observable<any> {
-    let headers: HttpHeaders = new HttpHeaders({ 'filename': filename });
-    return this.http.get(`${BASEURL}/file`, { headers: headers, responseType: 'blob', observe: "body" });
+  getFile(id: number): Observable<any> {
+    return this.http.get(`${BASEURL}/file/${id}`, { responseType: 'blob', observe: "body" });
   }
 
   getUploadUrl(): string {

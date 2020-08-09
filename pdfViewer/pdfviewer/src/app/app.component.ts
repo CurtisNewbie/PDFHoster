@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ViewerComponent } from './viewer/viewer.component';
+import { PdfFile } from './model/file';
 
 @Component({
   selector: 'app-root',
@@ -18,8 +19,8 @@ export class AppComponent {
     this.hidden = !this.hidden;
   }
 
-  onSelect(fname: string) {
-    this.filename = fname;
-    this.child.displayFile(this.filename);
+  onSelect(file: PdfFile) {
+    this.filename = file.name;
+    this.child.displayFile(file);
   }
 }

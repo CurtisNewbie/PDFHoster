@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpService } from '../http.service';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
+import { PdfFile } from '../model/file';
 
 @Component({
   selector: 'app-viewer',
@@ -10,7 +11,7 @@ import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 export class ViewerComponent implements OnInit {
 
   pdfDoc: Blob;
-  filename: string;
+  file: PdfFile;
   shortname: string;
 
   @ViewChild('pdfViewer', { static: true })
@@ -25,21 +26,21 @@ export class ViewerComponent implements OnInit {
   ngOnInit() {
   }
 
-  displayFile(filename: string) {
-    this.filename = filename;
+  displayFile(file: PdfFile) {
+    this.file = file;
     this.fetchFile();
     this.viewerPlaceHolder.nativeElement.scrollIntoView();
   }
 
   private fetchFile() {
-    let name = this.filename;
-    if (name) {
-      this.shortname = this.shorten(name);
-      this.http.getFile(name).subscribe({
+    let id = this.file.id;
+    if (id) {
+      this.shortname = this.shorten(this.file.name);
+      this.http.getFile(id).subscribe({
         next: (val) => { this.pdfViewer.pdfSrc = val; this.pdfViewer.refresh(); },
         error: (e) => { console.log },
         complete: () => {
-          console.log("Fetched PDF file", name);
+          console.log("Fetched PDF file", this.file.name);
         }
       })
     }

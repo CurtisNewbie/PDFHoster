@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { HttpService } from '../http.service';
+import { PdfFile } from '../model/file';
 
 @Component({
   selector: 'app-file-list',
@@ -8,27 +9,27 @@ import { HttpService } from '../http.service';
 })
 export class FileListComponent implements OnInit {
 
-  list: string[] = [];
+  list: PdfFile[] = [];
   fileUploadUrl: string = this.http.getUploadUrl();
-  found: string[] = [];
+  found: PdfFile[] = [];
   // searchedStr = "";
 
   @Output()
-  selectEmitter: EventEmitter<string> = new EventEmitter();
+  selectEmitter: EventEmitter<PdfFile> = new EventEmitter();
 
   constructor(private http: HttpService) { }
 
   ngOnInit() {
-    this.http.getFileNames().subscribe({
-      next: (val: string[]) => {
+    this.http.getFiles().subscribe({
+      next: (val) => {
         this.list = val;
       }, error: (e) => { console.log }
     });
   }
 
-  onClick(name: string): void {
-    this.selectEmitter.emit(name);
-    console.log("Clicked", name);
+  onClick(f: PdfFile): void {
+    this.selectEmitter.emit(f);
+    console.log("Clicked", f.name);
   }
 
   search(searchedStr: any): void {
@@ -37,7 +38,7 @@ export class FileListComponent implements OnInit {
     else {
       this.found = [];
       this.list.forEach((v, i, a) => {
-        if (v.toLowerCase().indexOf(lowerStr) >= 0)
+        if (v.name.toLowerCase().indexOf(lowerStr) >= 0)
           this.found.push(v);
       })
     }

@@ -1,6 +1,7 @@
 package com.curtisnewbie.io;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.*;
 import java.io.*;
 import javax.enterprise.context.ApplicationScoped;
@@ -28,7 +29,7 @@ public class FileManager {
     private final FileScanner scanner;
     private final String DEFAULT_FNAME;
     private final String DIR;
-    private final ConcurrentMap<String, File> files = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, File> files = new ConcurrentHashMap<>();
 
     public FileManager(FileScanner scanner, IOConfig ioConfig, CliArguments cli) {
         this.scanner = scanner;
@@ -64,36 +65,33 @@ public class FileManager {
             if (!v.exists())
                 files.remove(k);
         });
-        Map<String, File> scannedFiles = scanner.scanDir();
-        for (Map.Entry<String, File> entry : scannedFiles.entrySet())
+        Map<Integer, File> scannedFiles = scanner.scanDir();
+        for (Map.Entry<Integer, File> entry : scannedFiles.entrySet())
             files.putIfAbsent(entry.getKey(), entry.getValue());
     }
 
     /**
-     * Get the names of all files.
-     * <p>
-     * These names can be used later to retrieve the actual file. The returned List is not backed by
-     * any data structure (e.g., Map), thus will not be updated accordingly once returned. I.e., it
-     * might only reflect the view when it's created.
+     * Get all files in forms of {@code FileEntry}, which contains the name of the file and the id
+     * that can later be used to retrieve the actual data.
      * 
-     * @return list of names of all files discovered
+     * @return list of {@code FileEntry}
      */
-    public List<String> getAllFileNames() {
-        List<String> names = new ArrayList<>();
-        for (String s : this.files.keySet())
-            names.add(s);
-        return names;
+    public List<FileEntry> getAllFileEntries() {
+        List<FileEntry> fileEntries = new ArrayList<>();
+        for (Entry<Integer, File> e : files.entrySet())
+            fileEntries.add(new FileEntry(e.getKey(), e.getValue().getName()));
+        return fileEntries;
     }
 
     /**
-     * Get File by the name of the file.
+     * Get File by the id of the file.
      * 
-     * @param fn file name
+     * @param id file id
      * @return File or {@code NULL} if not exists
-     * @see FileManager#getAllFileNames()
+     * @see FileManager#getAllFileEntries()
      */
-    public File getFile(String fn) {
-        File f = this.files.get(fn);
+    public File getFile(int id) {
+        File f = this.files.get(id);
         if (f != null && !f.exists()) // return null if the file doesn't exist
             f = null;
         return f;

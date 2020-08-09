@@ -4,7 +4,7 @@
             <div *ngIf="list.length == 0" class="alert alert-secondary">List is Empty</div>
             <ul class="list-group" *ngFor="let n of list">
                 <button class="list-group-item list-group-item-action" (click)="onClick(n)"
-                    style="word-wrap: break-word;">{{n}}</button>
+                    style="word-wrap: break-word;">{{n.name}}</button>
             </ul>
         </div>
         <div class="mb-3 p-3 border">
@@ -12,7 +12,7 @@
             <input type="text" class="form-control" (keyup)="search($event)">
             <ul class="list-group" *ngFor="let f of found">
                 <button class="list-group-item list-group-item-action" (click)="onClick(f)"
-                    style="word-wrap: break-word;">{{f}}</button>
+                    style="word-wrap: break-word;">{{f.name}}</button>
             </ul>
         </div>
         <div class="mt-3 p-3 mb-3 border">
