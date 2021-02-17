@@ -4,5 +4,6 @@
 </div>
 <span #viewerPlaceHolder></span>
 <div id="pdfViewer">
-    <ng2-pdfjs-viewer [zoom]="100" id="pdfViewer" #pdfViewer></ng2-pdfjs-viewer>
+    <ng2-pdfjs-viewer [zoom]="'page-fit'" id="pdfViewer" [download]="true" [showSpinner]="true" [fullScreen]="true"
+        #pdfViewer></ng2-pdfjs-viewer>
 </div>
